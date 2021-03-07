@@ -1,12 +1,12 @@
-    content: headline|paragraph
+    content: headline|paragraph\n*
 
-    headline: # text\n
+    headline: #text\n
 
-    paragraph: textcode paragraph
+    paragraph: textcode\s*
 
     textcode: text|code
 
-    text: [^<>]
+    text: [^<>#\n]
 
     code: <line line? fen? moves?>
 
