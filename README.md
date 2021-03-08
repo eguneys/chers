@@ -1,8 +1,10 @@
-    content: headline|paragraph\n*
+    content: headline|board|paragraph\n*
 
     headline: #text\n
 
     paragraph: textcode\s*
+
+    board: =line ([1-9]\d*)\n
 
     textcode: text|code
 

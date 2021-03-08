@@ -1,9 +1,59 @@
+import * as m from './matchers';
+import { oneMatcherNode } from './matchmakers';
 import chars from './chars';
-import * as cs from './chars';
+import * as fs from './fixtures';
+
+type Messages = Array<[boolean, any]>
+
+function css(o: Maybe<MatcherResult>) {
+  if (o) {
+    console.log(chars(o.acc));
+  }
+}
 
 function jss(o: any) {
   console.log(JSON.stringify(o));
 }
+
+function cryif(cond: boolean, msg: string) {
+  if (cond) {
+    cry(msg);
+  }
+}
+
+function cry(msg: string): void {
+  console.log(`❌ ${msg}`);
+}
+
+function objEqual(o: any, b: any): boolean {
+  for (let key in o) {
+    if (b[key] !== o[key]) {
+      return false;
+    }
+  }
+  for (let key in b) {
+    if (b[key] !== o[key]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function nacc(msg: string, o: Maybe<MatcherResult>, value?: OneMatcherNode): void {
+  function cr(ms: any): void {
+    cry(msg + ' ' + JSON.stringify(ms));
+  }
+  if (!o) {
+    cr(`!${o}`);
+  } else if (o.rest !== '') {
+    cr('rest' + o.rest);
+  } else if (!!value && !objEqual(o.acc, value)) {
+    cr(o.acc);
+  }
+}
+
+const mtText = oneMatcherNode("text");
+const mtHeadline = oneMatcherNode("headline");
 
 export default function() {
 
@@ -20,13 +70,13 @@ export default function() {
                                textOnly,
                                headlineOnly].join('separator');
 
-  // jss(chars(textOnly));
-  // jss(chars(headlineOnly));
-  // jss(chars(recContent));
-  // let res = chars(starContent)
-  // if (res) {
-  //   console.log(view(res.acc));
-  // }
+  //nacc(textOnly, m.mText(textOnly), mtText(textOnly));
+  //nacc(headlineOnly, m.mHeadline(headlineOnly), mtHeadline(' aheadline'));
+  // jss(m.mText(textOnly));
+  // jss(m.mHeadline(headlineOnly)); 
+ // jss(m.mTextOrHeadline(starContent));
+  //jss(m.mContent(starContent));
+  // css(m.mContent(starContent));
 
 
   const line = `initial`,
@@ -34,36 +84,96 @@ export default function() {
   linefen = line + ' ' + fen,
   codeOnly = `<${linefen}>`;
 
-  // const codeMix: string = [codeOnly, 
-  //                          headlineOnly,
-  //                          textOnly,
-  //                          headlineOnly,
-  //                          codeOnly,
-  //                          textOnly].join('separator');
-  // jss(chars(codeMix));
-  // let res = chars(codeMix);
-  // if (res) {
-  //   console.log(view(res.acc));
-  // }
+  const codeText: string = [codeOnly, 
+                            textOnly,
+                            codeOnly,
+                            textOnly].join('separator');
 
-  // const bTurnOnly = `1...`,
-  // wTurnOnly = `12.`;
+  const codeMix: string = [headlineOnly,
+                           codeText,
+                           headlineOnly,
+                           codeText].join('separator');
 
-  // jss(chars(bTurnOnly));
-  // jss(chars(wTurnOnly));
+  //jss(m.mCode(codeOnly));
+  //jss(m.mCode(codeMix));
+  //css(m.mParagraph(codeText));
+  //css(m.mContent(codeMix));
+
+  const bTurnOnly = `1...`,
+  wTurnOnly = `12.`;
+
+  // jss(m.mTurn(bTurnOnly));
+  // jss(m.mTurn(wTurnOnly));
 
 
-  // let blunder = `??`;
-  // jss(chars(blunder, cs.mMoveGlyphs));
+  let blunder = `??`,
+  brilliantUnclear = `!! ∞`;
+  // jss(m.mMoveGlyph(blunder));
+  // jss(m.mMPOGlyphs(brilliantUnclear));
 
 
   let regularMove = `e4`,
   glyphMovePosition = `Bxd3?? ∞`,
   glypMove = `Ne7g6+?!`;
 
-  jss(chars(regularMove, cs.mSan));
-  jss(chars(glyphMovePosition, cs.mSanWithGlyph));
+  //jss(m.mSan(regularMove));
+  //jss(m.mSan(spacedMove));
+  //jss(m.mMove(glyphMovePosition));
   
 
+  const oneMove = `1. e4`,
+  continueMove = `2... e4`,
+  twoMove = `1. e4 e5`;
+
+  // jss(m.mOneMove(oneMove));
+  // jss(m.mContinueMove(continueMove));
+  // jss(m.mTwoMove(twoMove));
   
+  const continueTwoMove = `2... e4 3. Nf3`,
+  threeMove = `1. e4 e5 2. Nf3`,
+  fourMove = `1. e4 e5 2. Nf3 Nf6`,
+  manyMoves = `1. e4 e5 2. Nf3 Nf6 3. c3 c5 4. Nf3`;
+
+  const badMove = `1. e4 e5 e6`,
+  badMove2 = `2... e4 e5`;
+
+  let validMoves = [oneMove,
+                    continueMove,
+                    continueTwoMove,
+                    threeMove,
+                    fourMove,
+                    manyMoves];
+
+  validMoves.forEach(_ => nacc(_, m.mMoves(_)));
+
+  // jss(m.mMoves(oneMove));
+  // jss(m.mMoves(continueMove));
+  // jss(m.mMoves(continueTwoMove));
+  // jss(m.mMoves(threeMove));
+  // jss(m.mMoves(fourMove));
+  // jss(m.mMoves(badMove));
+  // jss(m.mMoves(badMove2));
+
+  let codeLineMoves = `<${line} ${manyMoves}>`;
+
+  // jss(m.mCode(codeLineMoves));
+
+  let codeLineLineMoves = `<${line} ${line} ${manyMoves}>`;
+
+  // jss(m.mLineAndMoves(`${line} ${line} ${manyMoves}`));
+  //jss(m.mCode(codeLineLineMoves));
+
+
+  let showBoard = `=${line} 19`
+  // jss(m.mBoard(showBoard));
+
+
+  // jss(m.mContent(fs.debug));
+  nacc("content", m.mContent(fs.content));
+
+  fs.kingsgambit.forEach((_, i) => {
+    nacc("kg" + i, m.mContent(_))
+  });
+
+
 }
