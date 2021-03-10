@@ -1,5 +1,7 @@
-import { FFilter, Node, node, addChild, reduce, filter } from './node';
+import { FFilter, Node, node, addChild, reduce, filter, reducePlus } from './node';
 import * as tt from './types';
+import * as mt from './model';
+import { reducer } from './nodetomodel';
 
 export function addOneMatcherToNode(root: Node<tt.OneMatcherValue>, 
                              mv: tt.OneMatcherValue): Node<tt.OneMatcherValue> {
@@ -41,6 +43,10 @@ export function fOfType(tpe: tt.OneMatcherType): FFilter<tt.OneMatcherNode> {
   }
 }
 
-export default function chers(mv: tt.OneMatcherValue) {
+export function toNode(mv: tt.OneMatcherValue) {
   return addOneMatcherToNode(node('root'), mv);
+}
+
+export default function chers(mv: tt.OneMatcherValue) {
+  return toNode(mv);
 }

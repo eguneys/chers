@@ -116,7 +116,7 @@ export const mLineLineMoves = mm.mseq3([
   mm.msecond([mm.mpass, mLine, mSpace]),
   mm.msecond([mm.mpass, mLine, mSpace]),
   mMoves
-], rr.fOneAndThree("linelinemoves"));
+], rr.fAll("linelinemoves"));
 
 export const mCode =
   mm.mseq3([mm.mr(/^(<)(.*)$/s, "cbegin"),

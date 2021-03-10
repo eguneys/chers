@@ -6,6 +6,8 @@ import * as fs from './fixtures';
 import * as tt from './types';
 
 import * as n from './node';
+import { reducer } from './nodetomodel';
+import * as mt from './model';
 
 
 function css(o: tt.Maybe<tt.MatcherResult>) {
@@ -181,13 +183,24 @@ function parseTest() {
 
 function chersTest() {
   
-  let res = m.mContent(fs.treePartsVariation);
+  let res = m.mContent(fs.debug);
 
   if (res) {
-    // jss(res);
+    //jss(res);
     let node = chers(res.acc);
-
-
+    //jss(node);
+    if (node) {
+      let c = n.reducePlus(node,
+                           'rootroot',
+                           reducer);
+      jss(c.content
+        .flatMap((_: any) => {
+          if (mt.isParagraph(_)) {
+            return _.paragraph;
+          }
+          return [];
+        }))
+    }
     // console.log(
     //   n.filter(node,
     //            cs.fMatchNode(cs.fOfType("glyphs"))));

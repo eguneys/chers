@@ -6,40 +6,46 @@ export type Triple<A> = [A, A, A]
 
 export type Many<A> = A | Array<A>
 
-export type OneMatcherType = |
-  "none" |
-  "equal" |
-  "number" |
-  "cbegin" |
-  "cend" |
-  "text" |
-  "space" |
-  "newline" |
-  "headline" |
-  "code" |
-  "paragraph" |
-  "line" |
-  "fen" |
-  "linefen" |
-  "linemoves" |
-  "linelinemoves" |
-  "ply" |
-  "mglyph" |
-  "pglyph" |
-  "oglyph" |
-  "glyphs" |
-  "san" |
-  "move" |
-  "onemove" |
-  "twomove" |
-  "cmove" |
-  "zeroturn" |
-  "oneturn" |
-  "moves" |
-  "board" |
-  "shortcastles" |
-  "longcastles" |
-  "content"
+export type LeafMatcherType =
+  | "none"
+  | "equal"
+  | "number"
+  | "cbegin"
+  | "cend"
+  | "text"
+  | "space"
+  | "newline"
+  | "headline"
+  | "line"
+  | "fen"
+  | "ply"
+  | "mglyph"
+  | "pglyph"
+  | "oglyph"
+  | "san"
+  | "board"
+  | "zeroturn"
+  | "oneturn"
+  | "shortcastles"
+  | "longcastles"
+
+export type BranchMatcherType =
+  | "code"
+  |"paragraph"
+  | "linefen"
+  | "linemoves"
+  | "linelinemoves"
+  | "glyphs"
+  | "move"
+  | "onemove"
+  | "twomove"
+  | "cmove"
+  | "moves"
+  | "content"
+
+export type OneMatcherType = 
+  | LeafMatcherType
+  | BranchMatcherType
 
 export type OneMatcherValue = 
   string | 
