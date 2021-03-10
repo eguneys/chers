@@ -1,4 +1,4 @@
-export const debug = `t32...Ng3 t3...Nxe5 14... Ng3 15. O-O-O`;
+export const debug = `1. e4 e5 2. f4 exf4`;
 
 export const content = `
  <initial rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1> 

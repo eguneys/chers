@@ -1,13 +1,16 @@
 import * as m from './matchers';
 import { oneMatcherNode } from './matchmakers';
-import chars from './chars';
+import chers from './chers';
+import * as cs from './chers';
 import * as fs from './fixtures';
+import * as tt from './types';
 
-type Messages = Array<[boolean, any]>
+import * as n from './node';
 
-function css(o: Maybe<MatcherResult>) {
+
+function css(o: tt.Maybe<tt.MatcherResult>) {
   if (o) {
-    console.log(chars(o.acc));
+    // console.log(chars(o.acc));
   }
 }
 
@@ -39,7 +42,7 @@ function objEqual(o: any, b: any): boolean {
   return true;
 }
 
-function nacc(msg: string, o: Maybe<MatcherResult>, value?: OneMatcherNode): void {
+function nacc(msg: string, o: tt.Maybe<tt.MatcherResult>, value?: tt.OneMatcherNode): void {
   function cr(ms: any): void {
     cry(msg + ' ' + JSON.stringify(ms));
   }
@@ -55,7 +58,7 @@ function nacc(msg: string, o: Maybe<MatcherResult>, value?: OneMatcherNode): voi
 const mtText = oneMatcherNode("text");
 const mtHeadline = oneMatcherNode("headline");
 
-export default function() {
+function parseTest() {
 
   // const text = `lkja sdf@#$ ^234 890..la\< ns>k\ndfl.`;
   // console.log(chars(text));
@@ -78,7 +81,6 @@ export default function() {
   //jss(m.mContent(starContent));
   // css(m.mContent(starContent));
 
-
   const line = `initial`,
   fen = `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1`,
   linefen = line + ' ' + fen,
@@ -96,8 +98,8 @@ export default function() {
 
   //jss(m.mCode(codeOnly));
   //jss(m.mCode(codeMix));
-  //css(m.mParagraph(codeText));
-  //css(m.mContent(codeMix));
+  // jss(m.mParagraph(codeText));
+  //jss(m.mContent(codeMix));
 
   const bTurnOnly = `1...`,
   wTurnOnly = `12.`;
@@ -144,7 +146,7 @@ export default function() {
                     fourMove,
                     manyMoves];
 
-  validMoves.forEach(_ => nacc(_, m.mMoves(_)));
+  // validMoves.forEach(_ => nacc(_, m.mMoves(_)));
 
   // jss(m.mMoves(oneMove));
   // jss(m.mMoves(continueMove));
@@ -169,11 +171,33 @@ export default function() {
 
 
   // jss(m.mContent(fs.debug));
-  nacc("content", m.mContent(fs.content));
+  //nacc("content", m.mContent(fs.content));
 
   fs.kingsgambit.forEach((_, i) => {
-    nacc("kg" + i, m.mContent(_))
+    // nacc("kg" + i, m.mContent(_))
   });
 
+}
 
+function chersTest() {
+  
+  let res = m.mContent(fs.treePartsVariation);
+
+  if (res) {
+    // jss(res);
+    let node = chers(res.acc);
+
+
+    // console.log(
+    //   n.filter(node,
+    //            cs.fMatchNode(cs.fOfType("glyphs"))));
+
+  }
+
+}
+
+
+export default function() {
+  chersTest();
+  parseTest();
 }

@@ -98,7 +98,7 @@ export const mMoves = mm.mseq3([
   mm.mOpt(mm.msecond([mm.mpass, mContinueMove, mm.mOpt(mSpace)])),
   mm.mOpt(mm.mstar(mm.msecond([mm.mpass, mTwoMove, mm.mOpt(mSpace)]))),
   mm.mOpt(mOneMove)
-], rr.fAll("moves"));
+], rr.fReduceMoves);
 
 export const mLineAndFen = mm.mseq3([
   mLine,
@@ -123,7 +123,7 @@ export const mCode =
             mm.meither([mLineAndFen,
                         mLineLineMoves,
                         mLineAndMoves]),
-            mm.mr(/^(>)(.*)$/s, "cend")], mm.fSecond);
+            mm.mr(/^(>)(.*)$/s, "cend")], rr.fSecond("code"));
 
 export const mA__ = mm.meither([mLineAndFen,
                                 mLineLineMoves,
@@ -133,9 +133,9 @@ export const mTextOrCode =
   mm.meither([mText, mCode]);
 
 export const mParagraph =
-  mm.mstar(mTextOrCode);
+  mm.mgroup(mm.mstar(mTextOrCode), mm.oneMatcherNode("paragraph"));
 
 export const mContent =
-  mm.mstar(
+  mm.mgroup(mm.mstar(
     mm.meither([mNewline, mHeadline, mParagraph])
-  )
+  ), mm.oneMatcherNode("content"))

@@ -1,12 +1,12 @@
-type Maybe<T> = T | undefined
+export type Maybe<T> = T | undefined
 
-type Either<A, B> = A | B
+export type Either<A, B> = A | B
 
-type Triple<A> = [A, A, A]
+export type Triple<A> = [A, A, A]
 
-type Many<A> = A | Array<A>
+export type Many<A> = A | Array<A>
 
-type OneMatcherType = |
+export type OneMatcherType = |
   "none" |
   "equal" |
   "number" |
@@ -16,6 +16,8 @@ type OneMatcherType = |
   "space" |
   "newline" |
   "headline" |
+  "code" |
+  "paragraph" |
   "line" |
   "fen" |
   "linefen" |
@@ -36,20 +38,21 @@ type OneMatcherType = |
   "moves" |
   "board" |
   "shortcastles" |
-  "longcastles"
+  "longcastles" |
+  "content"
 
-type OneMatcherValue = 
+export type OneMatcherValue = 
   string | 
   Many<OneMatcherNode>
 
-type OneMatcherNode = {
+export type OneMatcherNode = {
   tpe: OneMatcherType,
   value: OneMatcherValue
 }
 
-type MatcherResult = {
+export type MatcherResult = {
   rest: string,
   acc: OneMatcherValue
 }
 
-type Matcher = (rest: string) => Maybe<MatcherResult>
+export type Matcher = (rest: string) => Maybe<MatcherResult>

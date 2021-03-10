@@ -1,4 +1,5 @@
 import * as rr from './reducers';
+import * as tt from './types';
 
 export function fId<A>(_: A): A {
   return _;
@@ -8,9 +9,9 @@ export function fSecond<B>(_: Array<B>): B {
   return _[1];
 }
 
-export function oneMatcherNode(tpe: OneMatcherType):
-(value: OneMatcherValue) => OneMatcherNode {
-  return function(value: OneMatcherValue) {
+export function oneMatcherNode(tpe: tt.OneMatcherType):
+(value: tt.OneMatcherValue) => tt.OneMatcherNode {
+  return function(value: tt.OneMatcherValue) {
     return {
       tpe,
       value
@@ -20,15 +21,29 @@ export function oneMatcherNode(tpe: OneMatcherType):
 
 export const noneMatcherNode = oneMatcherNode("none")("");
 
-export const mpass = function(rest: string): Maybe<MatcherResult> {
+export const mpass = function(rest: string): tt.Maybe<tt.MatcherResult> {
   return {
     rest,
     acc: noneMatcherNode
   };
 }
 
-export function mOpt(data: Matcher): Matcher {
-  return function(rest: string): Maybe<MatcherResult> {
+export function mgroup(data: tt.Matcher, f: (_: tt.OneMatcherValue) => tt.OneMatcherValue): tt.Matcher {
+  return function(rest: string): tt.Maybe<tt.MatcherResult> {
+    let _matcher = data;
+    let _res = _matcher(rest);
+
+    if (_res) {
+      return {
+        rest: _res.rest,
+        acc: f(_res.acc)
+      };
+    }
+  }
+}
+
+export function mOpt(data: tt.Matcher): tt.Matcher {
+  return function(rest: string): tt.Maybe<tt.MatcherResult> {
     let _matcher = data;
 
     let _res = _matcher(rest);
@@ -45,15 +60,14 @@ export function mOpt(data: Matcher): Matcher {
   
 }
 
-export function mstar(data: Matcher): Matcher {
-  return function(rest: string): Maybe<MatcherResult> {
+export function mstar(data: tt.Matcher): tt.Matcher {
+  return function(rest: string): tt.Maybe<tt.MatcherResult> {
 
-    let accs: Array<OneMatcherValue> = [];
+    let accs: Array<tt.OneMatcherValue> = [];
     let _matcher = data;
 
     while (true) {
       let _res = _matcher(rest);
-
       if (!_res) {
         break;
       }
@@ -68,7 +82,7 @@ export function mstar(data: Matcher): Matcher {
       }
     }
 
-    let acc: Array<OneMatcherNode> = [];
+    let acc: Array<tt.OneMatcherNode> = [];
 
     accs.forEach(_ => {
       if (typeof _ !== 'string') {
@@ -88,8 +102,8 @@ export function mstar(data: Matcher): Matcher {
   }
 }
 
-export function meither(data: Array<Matcher>): Matcher {
-  return function(rest: string): Maybe<MatcherResult> {
+export function meither(data: Array<tt.Matcher>): tt.Matcher {
+  return function(rest: string): tt.Maybe<tt.MatcherResult> {
     for (let _matcher of data) {
       let _res = _matcher(rest);
 
@@ -101,13 +115,13 @@ export function meither(data: Array<Matcher>): Matcher {
 }
 
 
-export function msecond(data: Triple<Matcher>): Matcher {
-  return mseq3(data, rr.fReduceSecond);
+export function msecond(data: tt.Triple<tt.Matcher>): tt.Matcher {
+  return mseq3(data, fSecond);
 }
 
-export function mseq3Separator(separator: Matcher,
-                               data: Triple<Matcher>,
-                               fA: rr.SequenceReducer): Matcher {
+export function mseq3Separator(separator: tt.Matcher,
+                               data: tt.Triple<tt.Matcher>,
+                               fA: rr.SequenceReducer): tt.Matcher {
   let [_0, _1, _2] = data;
 
   return mseq3([msecond([mpass, _0, separator]),
@@ -115,10 +129,10 @@ export function mseq3Separator(separator: Matcher,
                 _2], fA);
 }
 
-export function mseq3(data: Triple<Matcher>, 
-                      fA: rr.SequenceReducer) : Matcher {
-  return function(rest: string): Maybe<MatcherResult> {
-    let accs: Array<OneMatcherValue> = [];
+export function mseq3(data: tt.Triple<tt.Matcher>, 
+                      fA: rr.SequenceReducer) : tt.Matcher {
+  return function(rest: string): tt.Maybe<tt.MatcherResult> {
+    let accs: Array<tt.OneMatcherValue> = [];
 
     for (let _matcher of data) {
       let _res = _matcher(rest);
@@ -136,17 +150,17 @@ export function mseq3(data: Triple<Matcher>,
     if (accs.length === 3) {
       return {
         rest,
-        acc: fA(accs as Triple<OneMatcherNode>)
+        acc: fA(accs as tt.Triple<tt.OneMatcherValue>)
       };
     }
   };
 }
 
 export function mr(data: RegExp,
-                   tpe: OneMatcherType): Matcher {
+                   tpe: tt.OneMatcherType): tt.Matcher {
   let reducer = oneMatcherNode(tpe);
 
-  return function(rest: string): Maybe<MatcherResult> {
+  return function(rest: string): tt.Maybe<tt.MatcherResult> {
     let m = rest.match(data);
 
     if (m) {
@@ -165,9 +179,9 @@ export function mr(data: RegExp,
 
 export function mrplus<A>(data: RegExp,
                           nbCapture: number, 
-                          reducer: (_: Array<string>) => OneMatcherValue): Matcher {
+                          reducer: (_: Array<string>) => tt.OneMatcherValue): tt.Matcher {
 
-  return function(rest: string): Maybe<MatcherResult> {
+  return function(rest: string): tt.Maybe<tt.MatcherResult> {
     let m = rest.match(data);
 
     if (m) {
@@ -187,11 +201,11 @@ export function mrplus<A>(data: RegExp,
 };
 
 export function mmap(data: Array<string>,
-                     tpe: OneMatcherType): Matcher {
+                     tpe: tt.OneMatcherType): tt.Matcher {
 
   let reducer = oneMatcherNode(tpe);
 
-  return function(rest: string): Maybe<MatcherResult> {
+  return function(rest: string): tt.Maybe<tt.MatcherResult> {
 
     let m = data.find(_ => rest.startsWith(_));
 
