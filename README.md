@@ -1,18 +1,26 @@
-    content: headline|paragraph
+    content: headline|board|paragraph\n*
 
-    headline: # text\n
+    headline: #text\n
 
-    paragraph: textcode paragraph
+    paragraph: textcode\s*
+
+    board: =line ([1-9]\d*)\n
 
     textcode: text|code
 
-    text: [^<>]
+    text: [^<>#\n]
 
-    code: <line line? fen? moves?>
+    code: fencode|linecode|linebranch
 
-    moves: move moves?
-    move: turn san
-    turn: \d.(..)?
+    fencode: <line fen>
+    linecode: <line moves>
+    linebranch: <line line moves>
+
+    moves: move*
+    move: turn san san |
+        turn san
+    turn: (\d)*... |
+    (\d)*.
 
     <line fen>
 
