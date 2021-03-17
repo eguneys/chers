@@ -29,16 +29,16 @@ export const mBoard = mm.mseq3([
   mEqual,
   mm.msecond([mm.mpass, mLine, mSpace]),
   mNumber
-], rr.fAll("board"));
+], rr.fLastTwo("board"));
 
 export const mFen =
   mm.mr(/^([^>]*\/[^>]*)(.*)/s, "fen");
 
 export const mZeroTurn = mm.mrplus(/^([1-9]\d*)\.([^\.].*)/s, 
-                                   1, rr.fReduceTurn("zeroturn", 0));
+                                   1, rr.fReduceTurn("zeroturn", 1));
 
 export const mOneTurn = mm.mrplus(/^([1-9]\d*)\.\.\.(.*)/s, 
-                                  1, rr.fReduceTurn("oneturn", 1));
+                                  1, rr.fReduceTurn("oneturn", 0));
 
 
 export const mMoveGlyph = mm.mmap(['??', '!!'],
@@ -137,5 +137,5 @@ export const mParagraph =
 
 export const mContent =
   mm.mgroup(mm.mstar(
-    mm.meither([mNewline, mHeadline, mParagraph])
+    mm.meither([mNewline, mHeadline, mBoard, mParagraph])
   ), mm.oneMatcherNode("content"))

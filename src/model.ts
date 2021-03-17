@@ -18,6 +18,8 @@ export type PosGlyph =
 export type ObsGlyph = 
 | 'o'
 
+export type Ply = number
+
 export type MPOGlyphs = {
   moveGlyph?: MoveGlyph,
   posGlyph?: PosGlyph,
@@ -28,9 +30,9 @@ export type San = {
   san: string
 }
 
-export type ShortCastles = "o-o"
+export type ShortCastles = "o-o" | "O-O" | "0-0"
 
-export type LongCastles = "o-o-o"
+export type LongCastles = "o-o-o" | "O-O-O" | "0-0-0"
 
 export type SanWithCastles = 
   | LongCastles
@@ -96,6 +98,10 @@ export type Paragraph = {
   paragraph: Array<TextOrCode>
 }
 
+export type Board = {
+  board: [Line, Ply]
+}
+
 export type HLine = {
   hline: string
 }
@@ -126,6 +132,7 @@ type LeafType =
   | LongCastles
   | Line
   | Fen
+  | Ply
   | Text2
   | HLine
   | NewLine
@@ -141,6 +148,7 @@ type BranchType =
   | LineAndMoves
   | LineLineMoves
   | LineAndFen
+  | Board
   | Paragraph
   | Content
 
@@ -163,6 +171,7 @@ export let branchRefs: BranchMatcherMap = {
   "linemoves": wrapBranch('lineAndMoves'),
   "linelinemoves": wrapBranch('linelineMoves'),
   "glyphs": makeGlyphs,
+  "board": wrapBranch('board'),
   "move": wrapBranch('move'),
   "onemove": wrapBranch('omove'),
   "twomove": wrapBranch('tmove'),
@@ -188,7 +197,6 @@ export let leafRefs: LeafMatcherMap = {
   "pglyph": makeId,
   "oglyph": makeId,
   "san": wrapLeaf('san'),
-  "board": wrapLeaf('board'),
   "zeroturn": wrapLeaf('zeroturn'),
   "oneturn": wrapLeaf('oneturn'),
   "shortcastles": makeId,

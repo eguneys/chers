@@ -209,8 +209,16 @@ function chersTest() {
 
 }
 
+function boardTest() {
+
+  const embed: string = `=line 10`;
+
+  console.log(m.mBoard(embed));
+  
+}
 
 export default function() {
-  chersTest();
-  parseTest();
+  boardTest();
+  //chersTest();
+  //parseTest();
 }

@@ -4,12 +4,13 @@ import * as tt from './types';
 export type SequenceReducer = (_: tt.Triple<tt.OneMatcherValue>) => tt.OneMatcherValue
 export type StringReducer = (_: Array<string>) => tt.OneMatcherNode
 
+// 1 1 2 , 2 3 4 , 3 5 6 , 4 7 8
 export function fReduceTurn(tpe: tt.OneMatcherType, nb: number): StringReducer {
   let reducer = mm.oneMatcherNode(tpe);
   return function (_: Array<string>): tt.OneMatcherNode {
     let [turn] = _;
     let dTurn = parseInt(turn);
-    let dPly = dTurn * 2 + nb;
+    let dPly = dTurn * 2 - nb;
     return reducer(dPly + '');
   }
 }
@@ -48,6 +49,9 @@ export const fReduceMove = fSliceTriple("move", 0, 2);
 
 export const fFirstTwo = (tpe: tt.OneMatcherType): SequenceReducer => {
   return fSliceTriple(tpe, 0, 2);
+}
+export const fLastTwo = (tpe: tt.OneMatcherType): SequenceReducer => {
+  return fSliceTriple(tpe, 1, 3);
 }
 
 export const fAll = (tpe: tt.OneMatcherType): SequenceReducer => {

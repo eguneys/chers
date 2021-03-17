@@ -23,7 +23,6 @@ export type LeafMatcherType =
   | "pglyph"
   | "oglyph"
   | "san"
-  | "board"
   | "zeroturn"
   | "oneturn"
   | "shortcastles"
@@ -31,6 +30,7 @@ export type LeafMatcherType =
 
 export type BranchMatcherType =
   | "code"
+  | "board"
   |"paragraph"
   | "linefen"
   | "linemoves"
