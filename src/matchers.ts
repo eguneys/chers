@@ -1,8 +1,15 @@
+import { moveSymbols,
+         posSymbols,
+         obsSymbols } from 'sfilg';
 import * as mm from './matchmakers';
 import * as rr from './reducers';
 
+function byLength(a: string, b: string) {
+  return b.length - a.length;
+}
+
 export const mNumber = 
-  mm.mr(/^([1-9]\d*)(.*)/s, "number");
+  mm.mr(/^(\d*)(.*)/s, "number");
 
 export const mText = 
   mm.mr(/^([^<>#\n]*)(.*)/s, "text");
@@ -41,20 +48,20 @@ export const mOneTurn = mm.mrplus(/^([1-9]\d*)\.\.\.(.*)/s,
                                   1, rr.fReduceTurn("oneturn", 0));
 
 
-export const mMoveGlyph = mm.mmap(['??', '!!'],
+export const mMoveGlyph = mm.mmap(moveSymbols.sort(byLength),
                                   'mglyph');
 
-export const mPosGlyph = mm.mmap(['∞'], 
+export const mPosGlyph = mm.mmap(posSymbols.sort(byLength),
                                  'pglyph');
 
-export const mObsGlyph = mm.mmap(['o'], 
+export const mObsGlyph = mm.mmap(obsSymbols.sort(byLength),
                                  'oglyph');
 
 export const mMPOGlyphs = mm.mseq3([
   mm.mOpt(mMoveGlyph),
   
   mm.mOpt(mm.msecond([mSpace, mPosGlyph, mm.mpass])),
-  mm.mOpt(mm.msecond([mSpace, mObsGlyph, mm.mpass])),
+  mm.mOpt(mm.msecond([mSpace, mObsGlyph, mSpace])),
 ], rr.fReduceMPOGlyphs);
 
 export const mSan = mm.mrplus(/^(N|B|R|Q|K|)([a-h]?)([1-8]?)(x?)([a-h][0-9])(=?[NBRQ]?)(\+?)(\#?)(.*)$/s, 

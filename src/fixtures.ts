@@ -1,6 +1,4 @@
-export const debug = `
-<initial 11. Ng5> !
-`;
+export const debug = `<initial 1. e4 e5 2. f4? exf4!!>`;
 
 export const content = `
  <initial rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1> 

@@ -172,7 +172,7 @@ function parseTest() {
   // jss(m.mBoard(showBoard));
 
 
-  // jss(m.mContent(fs.debug));
+  jss(m.mContent(fs.debug));
   //nacc("content", m.mContent(fs.content));
 
   fs.kingsgambit.forEach((_, i) => {
@@ -217,8 +217,21 @@ function boardTest() {
   
 }
 
+function modelTest() {
+
+  let met = m.mContent(fs.debug);
+
+  if (met) {
+    let node = chers(met.acc);
+
+    let res =  n.reducePlus(node, 'rootroot', reducer);
+    // console.log(res.content[0].paragraph[0].lineAndMoves[1].twoMoves[1].tmove[0].omove[1]);
+  }
+}
+
 export default function() {
-  boardTest();
-  //chersTest();
+  modelTest();
+  // boardTest();
+  // chersTest();
   //parseTest();
 }

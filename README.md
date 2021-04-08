@@ -1,3 +1,23 @@
+## Chers
+
+Chers markdown parser. Chers markdown combines chess notation with regular text.
+
+It looks like this:
+
+```
+# This is a headline
+
+This is regular text. Below is a fen definition for a line called "initial"
+<initial rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1>
+
+Next is chess moves written in algebraic notation. <initial 1. e4 e5 2. Nf3 Nf6> 
+
+You can describe variations from a line like this <line2 initial 2... Nc6 3. a3>
+
+```
+
+## Notes
+
     content: headline|board|paragraph\n*
 
     headline: #text\n

@@ -18,7 +18,7 @@ export type PosGlyph =
 export type ObsGlyph = 
 | 'o'
 
-export type Ply = number
+export type Ply = string
 
 export type MPOGlyphs = {
   moveGlyph?: MoveGlyph,
@@ -193,9 +193,9 @@ export let leafRefs: LeafMatcherMap = {
   "line": wrapLeaf('line'),
   "fen": wrapLeaf('fen'),
   "ply": makeId,
-  "mglyph": makeId,
-  "pglyph": makeId,
-  "oglyph": makeId,
+  "mglyph": wrapLeaf('mGlyph'),
+  "pglyph": wrapLeaf('pGlyph'),
+  "oglyph": wrapLeaf('oGlyph'),
   "san": wrapLeaf('san'),
   "zeroturn": wrapLeaf('zeroturn'),
   "oneturn": wrapLeaf('oneturn'),
@@ -216,13 +216,9 @@ function makeId(_: string): LeafType {
 }
 
 function makeGlyphs(_: Array<ModelRef>): MPOGlyphs {
-  if (_.length === 0) {
-    return {};
-  } else if (_.length === 1) {
-    return {};
-  } else {
-    return {};
-  }
+  let res = {};
+  _.forEach(_ => res = { ...res, ..._ });
+  return res;
 }
 
 function makeMoves(_: Array<ModelRef>): Moves {
