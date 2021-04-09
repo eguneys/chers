@@ -28,6 +28,15 @@ export const mpass = function(rest: string): tt.Maybe<tt.MatcherResult> {
   };
 }
 
+export const mlookAheadSpace = function(rest: string): tt.Maybe<tt.MatcherResult> {
+  if (rest[0] === ' ') {
+    return {
+      rest,
+      acc: noneMatcherNode
+    }
+  }
+}
+
 export function mgroup(data: tt.Matcher, f: (_: tt.OneMatcherValue) => tt.OneMatcherValue): tt.Matcher {
   return function(rest: string): tt.Maybe<tt.MatcherResult> {
     let _matcher = data;

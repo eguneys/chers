@@ -112,8 +112,8 @@ function parseTest() {
 
   let blunder = `??`,
   brilliantUnclear = `!! ∞`;
-  // jss(m.mMoveGlyph(blunder));
-  // jss(m.mMPOGlyphs(brilliantUnclear));
+  //jss(m.mMoveGlyph(blunder));
+  //jss(m.mMPOGlyphs(brilliantUnclear));
 
 
   let regularMove = `e4`,
@@ -123,7 +123,7 @@ function parseTest() {
   //jss(m.mSan(regularMove));
   //jss(m.mSan(spacedMove));
   //jss(m.mMove(glyphMovePosition));
-  
+  // jss(m.mMove(glypMove));
 
   const oneMove = `1. e4`,
   continueMove = `2... e4`,
@@ -225,13 +225,13 @@ function modelTest() {
     let node = chers(met.acc);
 
     let res =  n.reducePlus(node, 'rootroot', reducer);
-    // console.log(res.content[0].paragraph[0].lineAndMoves[1].twoMoves[1].tmove[0].omove[1]);
+    console.log(res);
   }
 }
 
 export default function() {
-  modelTest();
+  // modelTest();
   // boardTest();
   // chersTest();
-  //parseTest();
+  parseTest();
 }
