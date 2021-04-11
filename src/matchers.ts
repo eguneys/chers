@@ -59,9 +59,8 @@ export const mObsGlyph = mm.mmap(obsSymbols.sort(byLength),
 
 export const mMPOGlyphs = mm.mseq3([
   mm.mOpt(mMoveGlyph),
-  
-  mm.mOpt(mm.msecond([mSpace, mPosGlyph, mm.mpass])),
-  mm.mOpt(mm.msecond([mSpace, mObsGlyph, mm.mlookAheadSpace])),
+  mm.mOpt(mPosGlyph),
+  mm.mOpt(mObsGlyph)
 ], rr.fReduceMPOGlyphs);
 
 export const mSan = mm.mrplus(/^(N|B|R|Q|K|)([a-h]?)([1-8]?)(x?)([a-h][0-9])(=?[NBRQ]?)(\+?)(\#?)(.*)$/s, 

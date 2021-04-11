@@ -233,5 +233,7 @@ export default function() {
   // modelTest();
   // boardTest();
   // chersTest();
-  parseTest();
+  // parseTest();
+  jss(m.mMPOGlyphs(fs.debug));
+  
 }
